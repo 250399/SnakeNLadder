@@ -13,11 +13,11 @@ do
 	noOfRoll=$((noOfRoll+1))
 	r=$((RANDOM%2))
 
-	if [ $r -eq 0 ]
+	if [ $randomOption -eq 0 ]
 	then
 		[[ "$((position+diceRoll))" -gt 100 ]] && continue || position=$((position+diceRoll))
 		echo $position
-	elif [ $r -eq 1 ]
+	elif [ $randomOption -eq 1 ]
 	then
 		[[ "$((position-diceRoll))" -lt "0" ]] && continue || position=$((position-diceRoll))
 		echo $position
