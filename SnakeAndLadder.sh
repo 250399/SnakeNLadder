@@ -1,17 +1,25 @@
 #!/bin/bash
 
 
-playerPosition[1]=0
-diceRoll=$((RANDOM%6+1))
-randomOption=$((RANDOM%2))
-echo welcome to Snake And Ladder program
+echo "Welcome to snake and Ladder program"
 
-if [ $randomOption -eq 0 ]
-then
-	echo "Ladder, moving player ahead by" $dieRoll "Position"
-elif [ $randomOption -eq 1 ]
-then
-	echo "Snake, movin player behind by "$dieRoll" Position"
-else
- 	echo "you Stay there"
-fi
+position=0
+
+while [ $position -lt 100 ]
+do
+	diceRoll=$((RANDOM%6+1))
+
+	r=$((RANDOM%2))
+
+	if [ $r -eq 0 ]
+	then
+		position=$((position+diceRoll))
+		echo $position
+	elif [ $r -eq 1 ]
+	then
+		[[ "$((position-diceRoll))" -lt "0" ]] && continue || position=$((position-diceRoll))
+		echo $position
+	else
+ 		echo $position
+	fi
+done
