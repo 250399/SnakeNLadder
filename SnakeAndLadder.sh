@@ -6,7 +6,11 @@ playerPosition[1]=0
 playerPosition[2]=0
 noOfRoll=0
 playerFlag=1
-
+snake=1
+ladder=0
+samePosition=2
+startPosition=0
+endPosition=100
 
 playFunc () {
 	local playerChance=$1
@@ -14,25 +18,30 @@ playFunc () {
 	local diceRoll=$((RANDOM%6+1))
 	noOfRoll=$((noOfRoll+1))
 	randomOption=$((RANDOM%3))
-	if [ $randomOption -eq 0 ]
-	then
-		if [[ "$((position+diceRoll))" -le 100 ]] 
-		then
-			position=$((position+diceRoll))
-			playerPosition[$playerChance]=$position
+	case $randomOption in
+		$ladder)
+			if [[ "$((position+diceRoll))" -le $endPosition ]] 
+			then
+				position=$((position+diceRoll))
+				playerPosition[$playerChance]=$position
+				echo "Player" $playerChance ":"$position
+			fi
+			;;
+		$Snake)
+			if [[ "$((position-diceRoll))" -ge $startPosition ]]
+			then
+		 		position=$((position-diceRoll))
+				playerPosition[$playerChance]=$position
+				echo "Player" $playerChance ":"$position
+			fi
+		;;
+		$samePosition)
 			echo "Player" $playerChance ":"$position
-		fi
-	elif [ $randomOption -eq 1 ]
-	then
-		if [[ "$((position-diceRoll))" -ge 0 ]]
-		then
-		 	position=$((position-diceRoll))
-			playerPosition[$playerChance]=$position
-			echo "Player" $playerChance ":"$position
-		fi
-	else
-		echo "Player" $playerChance ":"$position
-	fi
+		;;
+		"*")
+			echo invalid
+		;;
+	esac
 	if [ $diceRoll -eq 6 ]
 	then
 		playFunc $playerChance
@@ -40,13 +49,8 @@ playFunc () {
 }
 
 checkWin () {
-  	while true
+  	while [ ${playerPosition[$playerFlag]} -ne $endPosition ]
 	do
-   		if [ ${playerPosition[$playerFlag]} -eq 100 ]
-      		then
-        			echo Player $playerFlag won
-        		break
-      		fi
       		playFunc $playerFlag
       		if [ $playerFlag -eq 2 ]
           	then
